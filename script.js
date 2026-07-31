@@ -262,9 +262,11 @@ function initProjectModal() {
   const link = document.querySelector(".modal-link");
   const cards = document.querySelectorAll(".project-card");
 
-  function openProject(projectId) {
+  function openProject(card) {
+    const projectId = card.dataset.project;
     const project = projects[projectId];
     if (!project) return;
+    const rect = card.getBoundingClientRect();
 
     kicker.textContent = project.kicker;
     title.textContent = project.title;
@@ -277,6 +279,10 @@ function initProjectModal() {
       })
     );
     link.href = project.url;
+    modal.style.setProperty("--card-left", `${rect.left}px`);
+    modal.style.setProperty("--card-top", `${rect.top}px`);
+    modal.style.setProperty("--card-width", `${rect.width}px`);
+    modal.style.setProperty("--card-height", `${rect.height}px`);
 
     document.body.classList.add("modal-open");
     modal.classList.add("active");
@@ -291,7 +297,7 @@ function initProjectModal() {
   }
 
   cards.forEach((card) => {
-    card.addEventListener("click", () => openProject(card.dataset.project));
+    card.addEventListener("click", () => openProject(card));
   });
 
   backdrop.addEventListener("click", closeProject);
