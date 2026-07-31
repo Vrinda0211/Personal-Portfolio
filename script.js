@@ -1,6 +1,57 @@
 const canvas = document.getElementById("neuro");
-const pointer = { x: 0, y: 0, targetX: 0, targetY: 0 };
+const pointer = { x: 0, y: 0, targetX: window.innerWidth * 0.5, targetY: window.innerHeight * 0.5 };
 let animationFrame = null;
+
+const projects = {
+  soc: {
+    kicker: "Cyber security + agents",
+    title: "Multi-Agent SOC Analyst Assistant",
+    description:
+      "An agentic cyber security orchestration system that coordinates triage, investigation, and response agents with stateful workflows and dynamic tool selection.",
+    tags: ["Python", "LangGraph", "ReAct", "FastAPI", "SQLite", "Grafana", "MITRE ATT&CK"],
+    url: "https://github.com/Vrinda0211/AgenticAI-MultiAgent-SOC",
+  },
+  vertex: {
+    kicker: "Realtime collaboration",
+    title: "Vertex",
+    description:
+      "A collaborative code editor with concurrent state synchronization, operational transformation for conflicting edits, and a context-aware AI pair programmer.",
+    tags: ["Python", "FastAPI", "WebSockets", "Operational Transformation", "CodeMirror", "Gemini API"],
+    url: "https://github.com/Vrinda0211/Vertex",
+  },
+  caskdb: {
+    kicker: "Storage systems",
+    title: "CaskDB",
+    description:
+      "A persistent key-value storage engine built around write-ahead logging, crash recovery, sorted memtables, immutable SSTables, and multi-file compaction.",
+    tags: ["C++17", "Write-Ahead Logging", "SSTables", "File I/O"],
+    url: "https://github.com/Vrinda0211/CaskDB",
+  },
+  sdn: {
+    kicker: "Networks",
+    title: "SDN Link Failure Recovery",
+    description:
+      "A fault-tolerant SDN controller that detects link failures, recomputes shortest paths, invalidates stale flow rules, and reroutes traffic.",
+    tags: ["Python", "Ryu", "Mininet", "OpenFlow", "BFS", "SDN"],
+    url: "https://github.com/Vrinda0211/SDN-Link-Failure-Recovery",
+  },
+  codedistill: {
+    kicker: "Developer tools",
+    title: "CodeDistill",
+    description:
+      "A Chrome extension that extracts executable code from noisy web content using deterministic text normalization and AI-assisted extraction.",
+    tags: ["JavaScript", "Chrome Extension APIs", "Prompt Engineering"],
+    url: "https://github.com/Vrinda0211/CodeDistill",
+  },
+  container: {
+    kicker: "Linux systems",
+    title: "Lightweight Container Runtime",
+    description:
+      "A minimal Linux container runtime focused on process lifecycle management and kernel-level resource monitoring.",
+    tags: ["C", "Linux Kernel Modules", "System Programming"],
+    url: "https://github.com/Vrinda0211/Container-Runtime",
+  },
+};
 
 function initNeuralVortex() {
   if (!canvas) return;
@@ -68,6 +119,7 @@ function initNeuralVortex() {
 
   function compileShader(source, type) {
     const shader = gl.createShader(type);
+    if (!shader) return null;
     gl.shaderSource(shader, source);
     gl.compileShader(shader);
     if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
@@ -82,6 +134,7 @@ function initNeuralVortex() {
   if (!vertexShader || !fragmentShader) return;
 
   const program = gl.createProgram();
+  if (!program) return;
   gl.attachShader(program, vertexShader);
   gl.attachShader(program, fragmentShader);
   gl.linkProgram(program);
@@ -134,6 +187,26 @@ function initNeuralVortex() {
   window.addEventListener("pointermove", handlePointerMove);
 }
 
+function initThemeToggle() {
+  const toggle = document.querySelector(".theme-toggle");
+  const storedTheme = localStorage.getItem("portfolio-theme");
+  const prefersLight = window.matchMedia("(prefers-color-scheme: light)").matches;
+  const shouldUseLight = storedTheme ? storedTheme === "light" : prefersLight;
+
+  function setTheme(theme) {
+    const isLight = theme === "light";
+    document.body.classList.toggle("light-theme", isLight);
+    toggle.setAttribute("aria-pressed", String(isLight));
+    toggle.setAttribute("aria-label", isLight ? "Toggle dark mode" : "Toggle light mode");
+    localStorage.setItem("portfolio-theme", theme);
+  }
+
+  setTheme(shouldUseLight ? "light" : "dark");
+  toggle.addEventListener("click", () => {
+    setTheme(document.body.classList.contains("light-theme") ? "dark" : "light");
+  });
+}
+
 function initScrollEffects() {
   const progress = document.querySelector(".scroll-progress");
   const revealItems = document.querySelectorAll(".reveal");
@@ -162,7 +235,7 @@ function initScrollEffects() {
 }
 
 function initTiltCards() {
-  const cards = document.querySelectorAll(".tilt-card, .hero-console");
+  const cards = document.querySelectorAll(".tilt-card");
 
   cards.forEach((card) => {
     card.addEventListener("pointermove", (event) => {
@@ -178,6 +251,60 @@ function initTiltCards() {
   });
 }
 
+function initProjectModal() {
+  const modal = document.querySelector(".project-modal");
+  const backdrop = document.querySelector(".modal-backdrop");
+  const closeButton = document.querySelector(".modal-close");
+  const title = document.getElementById("modal-title");
+  const kicker = document.getElementById("modal-kicker");
+  const description = document.getElementById("modal-description");
+  const tags = document.querySelector(".modal-tags");
+  const link = document.querySelector(".modal-link");
+  const cards = document.querySelectorAll(".project-card");
+
+  function openProject(projectId) {
+    const project = projects[projectId];
+    if (!project) return;
+
+    kicker.textContent = project.kicker;
+    title.textContent = project.title;
+    description.textContent = project.description;
+    tags.replaceChildren(
+      ...project.tags.map((tag) => {
+        const item = document.createElement("span");
+        item.textContent = tag;
+        return item;
+      })
+    );
+    link.href = project.url;
+
+    document.body.classList.add("modal-open");
+    modal.classList.add("active");
+    modal.setAttribute("aria-hidden", "false");
+    closeButton.focus();
+  }
+
+  function closeProject() {
+    modal.classList.remove("active");
+    modal.setAttribute("aria-hidden", "true");
+    document.body.classList.remove("modal-open");
+  }
+
+  cards.forEach((card) => {
+    card.addEventListener("click", () => openProject(card.dataset.project));
+  });
+
+  backdrop.addEventListener("click", closeProject);
+  closeButton.addEventListener("click", closeProject);
+  window.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && modal.classList.contains("active")) {
+      closeProject();
+    }
+  });
+}
+
 initNeuralVortex();
+initThemeToggle();
 initScrollEffects();
 initTiltCards();
+initProjectModal();

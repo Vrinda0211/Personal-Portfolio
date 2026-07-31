@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Portfolio of Vrinda Venugopal M, a Computer Science student building AI agents, systems, and scalable software."
+      content="Portfolio of Vrinda Venugopal M, a Computer Science student exploring AI systems, developer tools, and systems engineering."
     />
-    <title>Vrinda Venugopal M | Computer Science Portfolio</title>
+    <title>Vrinda Venugopal M | Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -17,271 +17,278 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <svg class="glass-filter" aria-hidden="true">
+      <defs>
+        <filter id="container-glass" x="0%" y="0%" width="100%" height="100%" color-interpolation-filters="sRGB">
+          <feTurbulence type="fractalNoise" baseFrequency="0.05 0.05" numOctaves="1" seed="1" result="turbulence" />
+          <feGaussianBlur in="turbulence" stdDeviation="2" result="blurredNoise" />
+          <feDisplacementMap in="SourceGraphic" in2="blurredNoise" scale="48" xChannelSelector="R" yChannelSelector="B" result="displaced" />
+          <feGaussianBlur in="displaced" stdDeviation="3" result="finalBlur" />
+          <feComposite in="finalBlur" in2="finalBlur" operator="over" />
+        </filter>
+      </defs>
+    </svg>
+
     <canvas id="neuro" aria-hidden="true"></canvas>
     <div class="ambient-grid" aria-hidden="true"></div>
     <div class="scroll-progress" aria-hidden="true"></div>
 
     <header class="site-header">
-      <a class="brand glass-button" href="#home" aria-label="Go to top">
+      <a class="brand liquid-button" href="#home" aria-label="Go to home">
         <span>VV</span>
       </a>
+
       <nav class="nav-panel" aria-label="Primary navigation">
-        <a href="#projects">Projects</a>
-        <a href="#skills">Skills</a>
-        <a href="#research">Research</a>
+        <a href="#home">Home</a>
+        <a href="#work">Work</a>
         <a href="#contact">Contact</a>
       </nav>
-      <a class="glass-button resume-button" href="assets/VrindaVenugopalM_ResumeFinal.pdf" download>
-        Resume
-      </a>
+
+      <div class="header-actions">
+        <a class="liquid-button resume-button" href="assets/VrindaVenugopalM_ResumeFinal.pdf" download>
+          <span>Resume</span>
+        </a>
+        <button class="theme-toggle liquid-icon" type="button" aria-label="Toggle light mode" aria-pressed="false">
+          <span class="sun" aria-hidden="true"></span>
+          <span class="moon" aria-hidden="true"></span>
+        </button>
+      </div>
     </header>
 
     <main id="home">
       <section class="hero section-shell">
         <div class="hero-copy reveal">
-          <p class="eyebrow">Bengaluru based Computer Science undergraduate</p>
-          <h1>Vrinda Venugopal M</h1>
+          <p class="eyebrow">Portfolio / experiments</p>
+          <h1>Hi, I am Vrinda</h1>
           <p class="hero-lede">
-            I build AI agent systems, developer tools, and low-level software with a taste for clean
-            architecture, real-time collaboration, and resilient systems.
+            I like turning half-wild ideas into working systems, then pretending that was the plan
+            all along.
           </p>
           <div class="hero-actions" aria-label="Primary actions">
-            <a class="glass-cta" href="mailto:vrindavenugopal2005@gmail.com">Start a conversation</a>
-            <a class="glass-button" href="https://github.com/Vrinda0211" target="_blank" rel="noreferrer">
-              GitHub
-            </a>
+            <a class="liquid-button primary-action" href="#work"><span>View Work</span></a>
+            <a class="liquid-button" href="mailto:vrindavenugopal2005@gmail.com"><span>Contact Me</span></a>
           </div>
         </div>
 
-        <aside class="hero-console reveal" aria-label="Portfolio highlights">
-          <div class="console-top">
+        <aside class="signal-panel reveal tilt-card" aria-label="Current coordinates">
+          <p class="panel-label">Current Coordinates</p>
+          <div class="signal-ring" aria-hidden="true">
             <span></span>
             <span></span>
             <span></span>
           </div>
-          <div class="console-line">
-            <span class="muted">focus</span>
-            <strong>Agentic AI + Systems Engineering</strong>
-          </div>
-          <div class="console-line">
-            <span class="muted">education</span>
-            <strong>PES University, CSE, CGPA 8.45</strong>
-          </div>
-          <div class="console-line">
-            <span class="muted">research</span>
-            <strong>IEEE CONECCT accepted publication</strong>
-          </div>
-          <div class="pulse-meter" aria-hidden="true">
-            <span></span><span></span><span></span><span></span><span></span><span></span>
-          </div>
+          <ul>
+            <li><span>01</span> Exploring AI agents and model evaluation</li>
+            <li><span>02</span> Building tools that make developers faster</li>
+            <li><span>03</span> Learning systems from the inside out</li>
+          </ul>
         </aside>
       </section>
 
-      <section class="ticker" aria-label="Technical focus areas">
-        <span>LLM Agents</span>
-        <span>FastAPI</span>
-        <span>LangGraph</span>
-        <span>Systems</span>
-        <span>WebSockets</span>
-        <span>PyTorch</span>
-        <span>OpenFlow</span>
-        <span>React</span>
+      <section class="section-shell coordinates-section">
+        <div class="section-heading centered reveal">
+          <p class="eyebrow">Current Coordinates</p>
+          <h2>Curious across the stack</h2>
+          <p>
+            I am not trying to fit inside one tiny label. Right now, I am drawn to AI systems,
+            developer tools, cyber security, networks, and software that has to be both clever and dependable.
+          </p>
+        </div>
+        <div class="coordinate-grid">
+          <article class="glass-panel reveal tilt-card">
+            <span class="coordinate-index">01</span>
+            <h3>Thinking in systems</h3>
+            <p>Finding the moving pieces, the failure paths, and the cleanest way to make them cooperate.</p>
+          </article>
+          <article class="glass-panel reveal tilt-card">
+            <span class="coordinate-index">02</span>
+            <h3>Making intelligence usable</h3>
+            <p>Exploring agents, tool calling, and workflows that turn models into useful collaborators.</p>
+          </article>
+          <article class="glass-panel reveal tilt-card">
+            <span class="coordinate-index">03</span>
+            <h3>Keeping room to branch out</h3>
+            <p>Following hard problems wherever they go, from browsers to backends to networks.</p>
+          </article>
+        </div>
       </section>
 
-      <section class="section-shell intro-grid">
-        <div class="glass-panel stat-card reveal">
-          <span class="stat-number">6</span>
-          <span class="stat-label">Selected engineering projects</span>
-        </div>
-        <div class="glass-panel stat-card reveal">
-          <span class="stat-number">8.45</span>
-          <span class="stat-label">Current CSE CGPA at PES University</span>
-        </div>
-        <div class="glass-panel stat-card reveal">
-          <span class="stat-number">1</span>
-          <span class="stat-label">Accepted research publication</span>
-        </div>
-      </section>
-
-      <section id="projects" class="section-shell">
+      <section id="work" class="section-shell projects-section">
         <div class="section-heading reveal">
-          <p class="eyebrow">Selected work</p>
-          <h2>Projects with real engineering weight</h2>
+          <p class="eyebrow">Selected Work</p>
+          <h2>Projects worth opening</h2>
+          <p>Click a card to flip into a full-screen project view. The long case studies can grow here later.</p>
         </div>
 
         <div class="project-grid">
-          <article class="project-card reveal tilt-card">
-            <div>
-              <p class="project-kicker">Cybersecurity orchestration</p>
-              <h3>Multi-Agent SOC Analyst Assistant</h3>
-              <p>
-                Coordinated triage, investigation, and response agents through stateful workflows,
-                dynamic tool selection, and security intelligence enrichment.
-              </p>
-            </div>
-            <div class="project-footer">
-              <span>Python</span><span>LangGraph</span><span>FastAPI</span><span>MITRE ATT&amp;CK</span>
-            </div>
-            <a href="https://github.com/Vrinda0211/AgenticAI-MultiAgent-SOC" target="_blank" rel="noreferrer">
-              View repository
-            </a>
-          </article>
+          <button class="project-card reveal tilt-card" type="button" data-project="soc">
+            <span class="project-kicker">Cyber security + agents</span>
+            <strong>Multi-Agent SOC Analyst Assistant</strong>
+            <p>Agentic orchestration for triage, investigation, response, and security enrichment.</p>
+            <span class="project-more">Open case study</span>
+          </button>
 
-          <article class="project-card reveal tilt-card featured">
-            <div>
-              <p class="project-kicker">Realtime AI collaboration</p>
-              <h3>Vertex</h3>
-              <p>
-                Built a collaborative code editor with concurrent state synchronization, operational
-                transformation, and an AI pair programmer with streamed responses.
-              </p>
-            </div>
-            <div class="project-footer">
-              <span>FastAPI</span><span>WebSockets</span><span>CodeMirror</span><span>Gemini API</span>
-            </div>
-            <a href="https://github.com/Vrinda0211/Vertex" target="_blank" rel="noreferrer">
-              View repository
-            </a>
-          </article>
+          <button class="project-card reveal tilt-card featured" type="button" data-project="vertex">
+            <span class="project-kicker">Realtime collaboration</span>
+            <strong>Vertex</strong>
+            <p>Collaborative code editing with operational transformation and an AI pair programmer.</p>
+            <span class="project-more">Open case study</span>
+          </button>
 
-          <article class="project-card reveal tilt-card">
-            <div>
-              <p class="project-kicker">Storage engine</p>
-              <h3>CaskDB</h3>
-              <p>
-                Engineered a persistent key-value store with write-ahead logging, crash recovery,
-                sorted memtables, immutable SSTables, and multi-file compaction.
-              </p>
-            </div>
-            <div class="project-footer">
-              <span>C++17</span><span>WAL</span><span>SSTables</span><span>File I/O</span>
-            </div>
-            <a href="https://github.com/Vrinda0211/CaskDB" target="_blank" rel="noreferrer">
-              View repository
-            </a>
-          </article>
+          <button class="project-card reveal tilt-card" type="button" data-project="caskdb">
+            <span class="project-kicker">Storage systems</span>
+            <strong>CaskDB</strong>
+            <p>A persistent key-value storage engine with WAL, SSTables, and compaction.</p>
+            <span class="project-more">Open case study</span>
+          </button>
 
-          <article class="project-card reveal tilt-card">
-            <div>
-              <p class="project-kicker">Network resilience</p>
-              <h3>SDN Link Failure Recovery</h3>
-              <p>
-                Developed an SDN controller that detects link failures, recomputes shortest paths,
-                invalidates stale flow rules, and reroutes traffic.
-              </p>
-            </div>
-            <div class="project-footer">
-              <span>Python</span><span>Ryu</span><span>Mininet</span><span>OpenFlow</span>
-            </div>
-            <a href="https://github.com/Vrinda0211/SDN-Link-Failure-Recovery" target="_blank" rel="noreferrer">
-              View repository
-            </a>
-          </article>
+          <button class="project-card reveal tilt-card" type="button" data-project="sdn">
+            <span class="project-kicker">Networks</span>
+            <strong>SDN Link Failure Recovery</strong>
+            <p>An SDN controller that detects failures and reroutes traffic through alternate paths.</p>
+            <span class="project-more">Open case study</span>
+          </button>
 
-          <article class="project-card reveal tilt-card">
-            <div>
-              <p class="project-kicker">Developer tooling</p>
-              <h3>CodeDistill</h3>
-              <p>
-                Built a Chrome extension that extracts executable code from noisy web content using
-                deterministic text normalization and AI-assisted code extraction.
-              </p>
-            </div>
-            <div class="project-footer">
-              <span>JavaScript</span><span>Chrome APIs</span><span>Prompt Engineering</span>
-            </div>
-            <a href="https://github.com/Vrinda0211/CodeDistill" target="_blank" rel="noreferrer">
-              View repository
-            </a>
-          </article>
+          <button class="project-card reveal tilt-card" type="button" data-project="codedistill">
+            <span class="project-kicker">Developer tools</span>
+            <strong>CodeDistill</strong>
+            <p>A Chrome extension for extracting copy-ready code from noisy web pages.</p>
+            <span class="project-more">Open case study</span>
+          </button>
 
-          <article class="project-card reveal tilt-card">
-            <div>
-              <p class="project-kicker">Linux systems</p>
-              <h3>Lightweight Container Runtime</h3>
-              <p>
-                Built a minimal Linux container runtime with process lifecycle management and
-                kernel-level resource monitoring.
-              </p>
-            </div>
-            <div class="project-footer">
-              <span>C</span><span>Linux Kernel Modules</span><span>System Programming</span>
-            </div>
-            <a href="https://github.com/Vrinda0211/Container-Runtime" target="_blank" rel="noreferrer">
-              View repository
-            </a>
-          </article>
+          <button class="project-card reveal tilt-card" type="button" data-project="container">
+            <span class="project-kicker">Linux systems</span>
+            <strong>Lightweight Container Runtime</strong>
+            <p>A minimal container runtime with process lifecycle and resource monitoring.</p>
+            <span class="project-more">Open case study</span>
+          </button>
         </div>
       </section>
 
-      <section id="skills" class="section-shell split-section">
+      <section class="section-shell work-experience-section">
         <div class="section-heading reveal">
-          <p class="eyebrow">Technical stack</p>
-          <h2>AI fluency with systems instincts</h2>
+          <p class="eyebrow">Work Experience</p>
+          <h2>Research intern work</h2>
         </div>
-        <div class="skill-cloud reveal" aria-label="Skills">
-          <span>C</span><span>C++</span><span>Python</span><span>JavaScript</span><span>Dart</span>
-          <span>FastAPI</span><span>LangGraph</span><span>React.js</span><span>Node.js</span>
-          <span>Express.js</span><span>CodeMirror</span><span>PyTorch</span><span>Flutter</span>
-          <span>Agentic AI</span><span>LLM Agents</span><span>ReAct</span><span>Tool Calling</span>
-          <span>Sentence Transformers</span><span>Random Forest</span><span>SQLite</span><span>MongoDB</span>
-          <span>NumPy</span><span>Pandas</span><span>Linux</span><span>TCP/IP</span><span>OpenFlow</span>
-          <span>Mininet</span><span>Ryu</span><span>WebSockets</span><span>Grafana</span>
+        <article class="experience-card glass-panel reveal tilt-card">
+          <div>
+            <span class="experience-date">June 2026 - July 2026</span>
+            <h3>Research Intern, Centre for Computer Networks and Cyber Security</h3>
+            <p>
+              Worked with PES University CCNCS on research at the intersection of computer networks,
+              cyber security, LLM evaluation, and model-selection workflows.
+            </p>
+          </div>
+          <span class="experience-mark">CCNCS</span>
+        </article>
+      </section>
+
+      <section id="skills" class="section-shell skills-section">
+        <div class="section-heading centered reveal">
+          <p class="eyebrow">Skills</p>
+          <h2>Tools I reach for</h2>
+        </div>
+        <div class="skill-grid">
+          <article class="glass-panel skill-card reveal">
+            <h3>Languages</h3>
+            <p>C, C++, Python, JavaScript, Dart</p>
+          </article>
+          <article class="glass-panel skill-card reveal">
+            <h3>AI / ML</h3>
+            <p>Agentic AI, LLM Agents, ReAct, Tool Calling, Sentence Transformers, Random Forest</p>
+          </article>
+          <article class="glass-panel skill-card reveal">
+            <h3>Backend & Web</h3>
+            <p>FastAPI, React.js, Node.js, Express.js, WebSockets, CodeMirror</p>
+          </article>
+          <article class="glass-panel skill-card reveal">
+            <h3>Systems & Networks</h3>
+            <p>Linux, TCP/IP, OpenFlow, Software-Defined Networking, Mininet, Ryu</p>
+          </article>
+          <article class="glass-panel skill-card reveal">
+            <h3>Data & Tools</h3>
+            <p>SQLite, MongoDB, NumPy, Pandas, Git, GitHub, Grafana, VS Code</p>
+          </article>
         </div>
       </section>
 
-      <section id="research" class="section-shell timeline-section">
+      <section class="section-shell research-section">
         <div class="section-heading reveal">
-          <p class="eyebrow">Research and education</p>
-          <h2>Academic signal, practical execution</h2>
+          <p class="eyebrow">Research Experience</p>
+          <h2>Accepted IEEE paper</h2>
         </div>
-        <div class="timeline">
-          <article class="glass-panel timeline-item reveal">
-            <span>June 2026 - July 2026</span>
-            <h3>Research Intern, CCNCS, PES University</h3>
-            <p>
-              Worked in computer networks and cyber security research, aligning with LLM evaluation
-              and intelligent model-selection interests.
-            </p>
-          </article>
-          <article class="glass-panel timeline-item reveal">
-            <span>Accepted for publication</span>
-            <h3>IEEE CONECCT Conference</h3>
-            <p>
-              A Difficulty-Aware Prompt-Model Recommendation Framework for LLM-Generated Python Code
-              Using Competency-Based Evaluation.
-            </p>
-          </article>
-          <article class="glass-panel timeline-item reveal">
-            <span>2024 - 2028</span>
-            <h3>B.Tech, Computer Science and Engineering</h3>
-            <p>PES University, CGPA 8.45.</p>
-          </article>
-        </div>
-      </section>
-
-      <section id="contact" class="section-shell contact-section">
-        <div class="glass-panel contact-card reveal">
-          <p class="eyebrow">Available for ambitious teams</p>
-          <h2>Let's build something sharp.</h2>
+        <article class="research-card glass-panel reveal tilt-card">
+          <span>IEEE CONECCT Conference</span>
+          <h3>
+            A Difficulty-Aware Prompt-Model Recommendation Framework for LLM-Generated Python Code
+            Using Competency-Based Evaluation
+          </h3>
           <p>
-            I'm interested in AI systems, backend engineering, developer tools, systems programming,
-            and research-heavy engineering roles.
+            A research direction focused on evaluating code-generation difficulty and recommending
+            suitable model choices for Python programming tasks.
           </p>
-          <div class="contact-actions">
-            <a class="glass-cta" href="mailto:vrindavenugopal2005@gmail.com">Email me</a>
-            <a class="glass-button" href="tel:+917022676930">Call</a>
-            <a class="glass-button" href="https://github.com/Vrinda0211" target="_blank" rel="noreferrer">
-              GitHub
-            </a>
+        </article>
+      </section>
+
+      <section class="section-shell about-section">
+        <div class="about-card glass-panel reveal">
+          <p class="eyebrow">About</p>
+          <h2>Curious, technical, and allergic to boring builds.</h2>
+          <p>
+            I like projects where intelligence meets infrastructure: agents that need memory, tools
+            that need good UX, networks that need resilience, and systems that need to hold together
+            when things get messy. I am still exploring where I want to go next, which is honestly
+            the fun part.
+          </p>
+        </div>
+      </section>
+
+      <section id="contact" class="contact-section">
+        <div class="marquee" aria-hidden="true">
+          <div>
+            <span>Let's connect</span><span>Let's build</span><span>Let's make it real</span>
+            <span>Let's connect</span><span>Let's build</span><span>Let's make it real</span>
+          </div>
+        </div>
+
+        <div class="section-shell">
+          <div class="contact-card glass-panel reveal">
+            <p class="eyebrow">Contact</p>
+            <h2>Tell me what you are building.</h2>
+            <p>
+              I am open to internships, research opportunities, and project collaborations around
+              AI systems, backend engineering, developer tools, and systems work.
+            </p>
+            <div class="contact-actions">
+              <a class="liquid-button primary-action" href="mailto:vrindavenugopal2005@gmail.com"><span>Email</span></a>
+              <a class="liquid-button" href="https://github.com/Vrinda0211" target="_blank" rel="noreferrer"><span>GitHub</span></a>
+              <a class="liquid-button" href="tel:+917022676930"><span>Phone</span></a>
+              <a class="liquid-button" href="assets/VrindaVenugopalM_ResumeFinal.pdf" download><span>Resume</span></a>
+            </div>
           </div>
         </div>
       </section>
     </main>
 
+    <div class="project-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true">
+      <button class="modal-backdrop" type="button" aria-label="Close project details"></button>
+      <article class="project-modal-card">
+        <button class="modal-close liquid-icon" type="button" aria-label="Close project details">
+          <span aria-hidden="true"></span>
+        </button>
+        <p class="eyebrow" id="modal-kicker">Project</p>
+        <h2 id="modal-title"></h2>
+        <p id="modal-description"></p>
+        <div class="modal-tags" aria-label="Project technology stack"></div>
+        <a class="liquid-button primary-action modal-link" href="#" target="_blank" rel="noreferrer">
+          <span>Open GitHub</span>
+        </a>
+      </article>
+    </div>
+
     <footer class="site-footer">
       <span>Vrinda Venugopal M</span>
-      <span>Built with a neural WebGL background and glass UI.</span>
+      <span>Neural background, liquid glass, and room to evolve.</span>
     </footer>
 
     <script src="script.js"></script>

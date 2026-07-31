@@ -35,6 +35,7 @@ Use this skill to shape personal portfolio websites that feel clear, credible, m
 - Use subtle motion for transitions, hover states, and section reveals; respect reduced-motion preferences.
 - Keep cards at 8px border radius or less unless the existing design language uses another radius.
 - For this portfolio, use `references/neural-vortex-background.md` when building the interactive canvas background.
+- For this portfolio, use `references/liquid-glass-components.md` when building glass buttons, controls, and panels.
 
 ## Content Standards
 
