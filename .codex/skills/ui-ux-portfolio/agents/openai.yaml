@@ -1,0 +1,4 @@
+interface:
+  display_name: "UI/UX Portfolio"
+  short_description: "Portfolio design and UX polish"
+  default_prompt: "Use $ui-ux-portfolio to design and build a polished personal portfolio website."
