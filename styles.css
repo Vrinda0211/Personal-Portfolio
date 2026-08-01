@@ -562,7 +562,7 @@ body.light-theme .project-modal-card {
 
 .project-card:hover,
 .project-card:focus-visible {
-  border-color: rgba(54, 229, 255, 0.38);
+  border-color: rgba(183, 202, 205, 0.38);
   background:
     linear-gradient(145deg, rgba(159, 180, 255, 0.13), rgba(216, 167, 196, 0.1)),
     var(--surface-strong);
