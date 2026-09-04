@@ -632,6 +632,10 @@ body.light-theme .project-more {
   padding: clamp(28px, 5vw, 58px);
 }
 
+.research-card + .research-card {
+  margin-top: 16px;
+}
+
 .research-card h3 {
   max-width: 900px;
   margin-top: 14px;
