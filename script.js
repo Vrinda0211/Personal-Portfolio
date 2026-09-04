@@ -376,11 +376,165 @@ const projects = {
     title: "CaskDB",
     description:
       "A persistent key-value storage engine built around write-ahead logging, crash recovery, sorted memtables, immutable SSTables, and multi-file compaction.",
+    overview:
+      "CaskDB is a persistent, embeddable key-value storage engine written in C++17. It uses a Bitcask-inspired storage model with a write-ahead log for durability, an in-memory sorted memtable for active state, immutable sorted SSTables for persistence, and compaction to merge multiple on-disk segments.",
+    workflow: [
+      {
+        number: "01",
+        title: "Write to the WAL",
+        text:
+          "Each write is first appended to the write-ahead log and flushed to disk before the in-memory state is updated. This makes acknowledged writes recoverable if the process crashes during an operation.",
+      },
+      {
+        number: "02",
+        title: "Update the Memtable",
+        text:
+          "After the WAL is flushed, the key-value state is updated in an in-memory sorted memtable implemented with std::map. Reads can use this current in-memory state without immediately requiring an on-disk lookup.",
+      },
+      {
+        number: "03",
+        title: "Flush to an SSTable",
+        text:
+          "When the memtable reaches its configured size threshold, its sorted contents are written to an immutable sorted string table. The persisted segment becomes a stable on-disk representation of that portion of the database.",
+      },
+      {
+        number: "04",
+        title: "Compact Storage",
+        text:
+          "Multiple SSTable segments can be merged into one clean sorted file. During compaction, newer values resolve conflicts so obsolete data can be reclaimed and the read path remains predictable.",
+      },
+    ],
+    detection: [
+      "Persistent key-value storage",
+      "Write-ahead logging",
+      "Crash recovery through WAL replay",
+      "Sorted in-memory memtable",
+      "Immutable SSTables",
+      "Multi-file compaction",
+    ],
+    attackPatterns: [
+      {
+        name: "Write-Ahead Logging",
+        detail:
+          "Writes are appended to the WAL and flushed before the in-memory state is changed, allowing the database state to be reconstructed after a crash.",
+        technique: "Durability",
+      },
+      {
+        name: "Memtable + SSTable",
+        detail:
+          "Active data is maintained in a sorted std::map and flushed into immutable sorted files when the configured memtable threshold is reached.",
+        technique: "Persistence",
+      },
+      {
+        name: "Multi-File Compaction",
+        detail:
+          "Multiple persisted segments are merged into a single sorted file while resolving conflicting records by recency and reclaiming obsolete storage.",
+        technique: "Storage Maintenance",
+      },
+    ],
+    feedback:
+      "The storage engine separates the durability path from the active in-memory state. WAL-first writes provide crash recovery, while immutable SSTables avoid modifying persisted segments in place.",
+    response:
+      "The implemented engine provides the core operations needed for an embeddable persistent key-value store, including put, get, remove, replay, flushing, and compaction.",
+    observability:
+      "CaskDB is implemented as a C++17 storage engine with explicit persistence and recovery operations. The current implementation uses a configurable memtable threshold and exposes the storage lifecycle through its KVStore interface.",
     tags: [
       "C++17",
       "Write-Ahead Logging",
       "SSTables",
       "File I/O",
+    ],
+    sections: [
+      {
+        type: "text",
+        label: "OVERVIEW",
+        content:
+          "CaskDB is a persistent, embeddable key-value storage engine written in C++17. It uses a Bitcask-inspired storage model with a write-ahead log for durability, an in-memory sorted memtable for active state, immutable sorted SSTables for persistence, and compaction to merge multiple on-disk segments.",
+      },
+      {
+        type: "workflow",
+        label: "HOW IT WORKS",
+        items: [
+          {
+            number: "01",
+            title: "Write to the WAL",
+            text:
+              "Each write is first appended to the write-ahead log and flushed to disk before the in-memory state is updated. This makes acknowledged writes recoverable if the process crashes during an operation.",
+          },
+          {
+            number: "02",
+            title: "Update the Memtable",
+            text:
+              "After the WAL is flushed, the key-value state is updated in an in-memory sorted memtable implemented with std::map. Reads can use this current in-memory state without immediately requiring an on-disk lookup.",
+          },
+          {
+            number: "03",
+            title: "Flush to an SSTable",
+            text:
+              "When the memtable reaches its configured size threshold, its sorted contents are written to an immutable sorted string table. The persisted segment becomes a stable on-disk representation of that portion of the database.",
+          },
+          {
+            number: "04",
+            title: "Compact Storage",
+            text:
+              "Multiple SSTable segments can be merged into one clean sorted file. During compaction, newer values resolve conflicts so obsolete data can be reclaimed and the read path remains predictable.",
+          },
+        ],
+      },
+      {
+        type: "list",
+        label: "FEATURES",
+        items: [
+          "Persistent key-value storage",
+          "Write-ahead logging",
+          "Crash recovery through WAL replay",
+          "Sorted in-memory memtable",
+          "Immutable SSTables",
+          "Multi-file compaction",
+        ],
+      },
+      {
+        type: "patterns",
+        label: "KEY TECHNICAL DETAILS",
+        items: [
+          {
+            name: "Write-Ahead Logging",
+            detail:
+              "Writes are appended to the WAL and flushed before the in-memory state is changed, allowing the database state to be reconstructed after a crash.",
+            technique: "Durability",
+          },
+          {
+            name: "Memtable + SSTable",
+            detail:
+              "Active data is maintained in a sorted std::map and flushed into immutable sorted files when the configured memtable threshold is reached.",
+            technique: "Persistence",
+          },
+          {
+            name: "Multi-File Compaction",
+            detail:
+              "Multiple persisted segments are merged into a single sorted file while resolving conflicting records by recency and reclaiming obsolete storage.",
+            technique: "Storage Maintenance",
+          },
+        ],
+      },
+      {
+        type: "text",
+        label: "DESIGN DECISIONS",
+        content:
+          "CaskDB keeps the write path durability-first by flushing the WAL before updating memory. Immutable SSTables are never modified in place, and compaction provides a controlled way to merge segments, resolve newer values, and reclaim obsolete data.",
+      },
+      {
+        type: "text",
+        label: "RESULT",
+        content:
+          "The implemented engine provides the core operations needed for an embeddable persistent key-value store, including put, get, remove, replay, flushing, and compaction.",
+      },
+      {
+        type: "text",
+        label: "IMPLEMENTATION",
+        content:
+          "CaskDB is implemented in C++17 around a KVStore interface. The current implementation uses a configurable memtable size threshold, WAL replay for recovery, SSTable persistence, and explicit compaction. Features such as tombstones, Bloom filters, sparse indexes, background compaction, and range queries are part of the roadmap rather than the current implementation.",
+      },
     ],
     url: "https://github.com/Vrinda0211/CaskDB",
   },
@@ -390,6 +544,70 @@ const projects = {
     title: "SDN Link Failure Recovery",
     description:
       "A fault-tolerant SDN controller that detects link failures, recomputes shortest paths, invalidates stale flow rules, and reroutes traffic.",
+    overview:
+      "This project implements a fault-tolerant Software-Defined Networking controller using Ryu and Mininet. The controller maintains a network graph, detects a failed link through OpenFlow port-status events, recomputes an alternate shortest path using BFS, and installs new forwarding rules so traffic can continue through the backup route.",
+    workflow: [
+      {
+        number: "01",
+        title: "Build the Network",
+        text:
+          "A Mininet topology connects four switches and two hosts with a primary route through s1, s2, and s4 and a backup route through s1, s3, and s4.",
+      },
+      {
+        number: "02",
+        title: "Detect Link Failure",
+        text:
+          "The Ryu controller receives EventOFPPortStatus notifications when a switch port changes state. The failed connection is reflected in the controller's network graph.",
+      },
+      {
+        number: "03",
+        title: "Recompute the Path",
+        text:
+          "After the failed link is removed from the graph, BFS is used to calculate a new shortest path between the affected endpoints. The controller can therefore select the available alternate route.",
+      },
+      {
+        number: "04",
+        title: "Flush and Reroute",
+        text:
+          "Stale flow rules are invalidated and new OpenFlow match-action rules are installed along the recomputed path. Reverse-flow rules are also installed so communication remains bidirectional.",
+      },
+    ],
+    detection: [
+      "OpenFlow port-status failure detection",
+      "Dynamic network graph updates",
+      "BFS shortest-path recomputation",
+      "Alternate-path rerouting",
+      "Stale flow invalidation",
+      "Dynamic OpenFlow rule installation",
+      "Reverse-flow installation",
+      "Mininet validation",
+    ],
+    attackPatterns: [
+      {
+        name: "Port Status Events",
+        detail:
+          "EventOFPPortStatus provides the controller with notification of switch-port state changes so a failed link can trigger recovery logic.",
+        technique: "Failure Detection",
+      },
+      {
+        name: "Graph + BFS",
+        detail:
+          "The controller updates its network graph after a failure and uses breadth-first search to recompute a shortest available path.",
+        technique: "Path Computation",
+      },
+      {
+        name: "OpenFlow Rerouting",
+        detail:
+          "Old forwarding rules are flushed and new match-action rules are installed along the alternate path, including the reverse direction.",
+        technique: "Flow Management",
+      },
+    ],
+    feedback:
+      "The recovery process is event-driven rather than dependent on manually changing routes. A link-state change triggers graph maintenance, path recomputation, and flow-rule updates.",
+    response:
+      "The controller automatically reroutes traffic from the primary s1 → s2 → s4 path to the backup s1 → s3 → s4 path when the s2–s4 connection fails.",
+    observability:
+      "The project was validated using Mininet connectivity tests, iperf traffic checks, switch flow tables, controller logs, and Wireshark packet captures.",
     tags: [
       "Python",
       "Ryu",
@@ -397,6 +615,100 @@ const projects = {
       "OpenFlow",
       "BFS",
       "SDN",
+    ],
+    sections: [
+      {
+        type: "text",
+        label: "OVERVIEW",
+        content:
+          "This project implements a fault-tolerant Software-Defined Networking controller using Ryu and Mininet. The controller maintains a network graph, detects a failed link through OpenFlow port-status events, recomputes an alternate shortest path using BFS, and installs new forwarding rules so traffic can continue through the backup route.",
+      },
+      {
+        type: "workflow",
+        label: "HOW IT WORKS",
+        items: [
+          {
+            number: "01",
+            title: "Build the Network",
+            text:
+              "A Mininet topology connects four switches and two hosts with a primary route through s1, s2, and s4 and a backup route through s1, s3, and s4.",
+          },
+          {
+            number: "02",
+            title: "Detect Link Failure",
+            text:
+              "The Ryu controller receives EventOFPPortStatus notifications when a switch port changes state. The failed connection is reflected in the controller's network graph.",
+          },
+          {
+            number: "03",
+            title: "Recompute the Path",
+            text:
+              "After the failed link is removed from the graph, BFS is used to calculate a new shortest path between the affected endpoints. The controller can therefore select the available alternate route.",
+          },
+          {
+            number: "04",
+            title: "Flush and Reroute",
+            text:
+              "Stale flow rules are invalidated and new OpenFlow match-action rules are installed along the recomputed path. Reverse-flow rules are also installed so communication remains bidirectional.",
+          },
+        ],
+      },
+      {
+        type: "list",
+        label: "FEATURES",
+        items: [
+          "OpenFlow port-status failure detection",
+          "Dynamic network graph updates",
+          "BFS shortest-path recomputation",
+          "Alternate-path rerouting",
+          "Stale flow invalidation",
+          "Dynamic OpenFlow rule installation",
+          "Reverse-flow installation",
+          "Mininet validation",
+        ],
+      },
+      {
+        type: "patterns",
+        label: "KEY TECHNICAL DETAILS",
+        items: [
+          {
+            name: "Port Status Events",
+            detail:
+              "EventOFPPortStatus provides the controller with notification of switch-port state changes so a failed link can trigger recovery logic.",
+            technique: "Failure Detection",
+          },
+          {
+            name: "Graph + BFS",
+            detail:
+              "The controller updates its network graph after a failure and uses breadth-first search to recompute a shortest available path.",
+            technique: "Path Computation",
+          },
+          {
+            name: "OpenFlow Rerouting",
+            detail:
+              "Old forwarding rules are flushed and new match-action rules are installed along the alternate path, including the reverse direction.",
+            technique: "Flow Management",
+          },
+        ],
+      },
+      {
+        type: "text",
+        label: "DESIGN DECISIONS",
+        content:
+          "The recovery logic uses the controller's network graph as the source of truth after a topology change. Recomputing the route with BFS keeps the recovery mechanism deterministic and lightweight for the project's small Mininet topology.",
+      },
+      {
+        type: "text",
+        label: "RESULT",
+        content:
+          "When the s2–s4 link fails, the controller detects the failure, removes the unavailable connection from its graph, computes the alternate s1 → s3 → s4 path, and updates forwarding rules so traffic can be rerouted.",
+      },
+      {
+        type: "text",
+        label: "IMPLEMENTATION",
+        content:
+          "The system is implemented with Python, Ryu, Mininet, and OpenFlow. Validation uses pingall for connectivity, iperf for traffic behavior, switch flow tables and controller logs for forwarding-state verification, and Wireshark for packet-level inspection.",
+      },
     ],
     url: "https://github.com/Vrinda0211/SDN-Link-Failure-Recovery",
   },
@@ -406,10 +718,166 @@ const projects = {
     title: "CodeDistill",
     description:
       "A Chrome extension that extracts executable code from noisy web content using deterministic text normalization and AI-assisted extraction.",
+    overview:
+      "CodeDistill is a Chrome Extension Manifest V3 developer tool for turning messy web content into clean, copy-ready code. It provides a deterministic Clean Copy path for common prompt and formatting clutter and an AI Copy Clean path powered by Gemini 2.5 Flash for mixed content containing prose, logs, output, and code.",
+    workflow: [
+      {
+        number: "01",
+        title: "Capture Web Content",
+        text:
+          "Users select or copy content from a web page and can invoke CodeDistill through its popup or right-click context menu.",
+      },
+      {
+        number: "02",
+        title: "Clean Copy",
+        text:
+          "The deterministic cleaning path normalizes common web and terminal clutter such as line numbers, dollar signs, Python prompts, continuation prompts, and PowerShell prompts without requiring an API key.",
+      },
+      {
+        number: "03",
+        title: "AI Copy Clean",
+        text:
+          "For mixed or ambiguous content, the extension can send the selected text to Gemini 2.5 Flash with an extraction-focused prompt so useful executable code can be separated from surrounding prose, logs, and output.",
+      },
+      {
+        number: "04",
+        title: "Copy the Result",
+        text:
+          "The cleaned result is returned to the extension and made available for copying. The Gemini API key is stored locally in Chrome storage when the AI mode is configured.",
+      },
+    ],
+    detection: [
+      "Deterministic code cleaning",
+      "AI-assisted code extraction",
+      "Chrome right-click context menu",
+      "Manifest V3 extension",
+      "Clipboard integration",
+      "Local API-key storage",
+      "Gemini 2.5 Flash",
+    ],
+    attackPatterns: [
+      {
+        name: "Deterministic Cleaning",
+        detail:
+          "Rule-based normalization removes common line-number and prompt artifacts such as $, >>>, >>, PS>, and related clutter without relying on an external model.",
+        technique: "Rule-Based Processing",
+      },
+      {
+        name: "AI Extraction",
+        detail:
+          "Gemini 2.5 Flash is used when content requires semantic separation of executable code from prose, logs, or output.",
+        technique: "Gemini 2.5 Flash",
+      },
+      {
+        name: "Chrome APIs",
+        detail:
+          "Manifest V3 capabilities including Context Menus, Scripting, Clipboard, and Storage APIs connect the extraction workflow to the browser.",
+        technique: "Browser Integration",
+      },
+    ],
+    feedback:
+      "CodeDistill separates predictable cleanup from AI-assisted extraction. This keeps common cleaning deterministic and usable without an API key while reserving Gemini for content that benefits from semantic interpretation.",
+    response:
+      "The extension provides a browser-native workflow for turning noisy copied material into executable code, with both a no-key deterministic path and an AI-assisted path for more complex content.",
+    observability:
+      "CodeDistill is packaged as a Chrome Extension Manifest V3 and uses browser APIs for context-menu actions, scripting, clipboard access, and local storage.",
     tags: [
       "JavaScript",
       "Chrome Extension APIs",
       "Prompt Engineering",
+    ],
+    sections: [
+      {
+        type: "text",
+        label: "OVERVIEW",
+        content:
+          "CodeDistill is a Chrome Extension Manifest V3 developer tool for turning messy web content into clean, copy-ready code. It provides a deterministic Clean Copy path for common prompt and formatting clutter and an AI Copy Clean path powered by Gemini 2.5 Flash for mixed content containing prose, logs, output, and code.",
+      },
+      {
+        type: "workflow",
+        label: "HOW IT WORKS",
+        items: [
+          {
+            number: "01",
+            title: "Capture Web Content",
+            text:
+              "Users select or copy content from a web page and can invoke CodeDistill through its popup or right-click context menu.",
+          },
+          {
+            number: "02",
+            title: "Clean Copy",
+            text:
+              "The deterministic cleaning path normalizes common web and terminal clutter such as line numbers, dollar signs, Python prompts, continuation prompts, and PowerShell prompts without requiring an API key.",
+          },
+          {
+            number: "03",
+            title: "AI Copy Clean",
+            text:
+              "For mixed or ambiguous content, the extension can send the selected text to Gemini 2.5 Flash with an extraction-focused prompt so useful executable code can be separated from surrounding prose, logs, and output.",
+          },
+          {
+            number: "04",
+            title: "Copy the Result",
+            text:
+              "The cleaned result is returned to the extension and made available for copying. The Gemini API key is stored locally in Chrome storage when the AI mode is configured.",
+          },
+        ],
+      },
+      {
+        type: "list",
+        label: "FEATURES",
+        items: [
+          "Deterministic code cleaning",
+          "AI-assisted code extraction",
+          "Chrome right-click context menu",
+          "Manifest V3 extension",
+          "Clipboard integration",
+          "Local API-key storage",
+          "Gemini 2.5 Flash",
+        ],
+      },
+      {
+        type: "patterns",
+        label: "KEY TECHNICAL DETAILS",
+        items: [
+          {
+            name: "Deterministic Cleaning",
+            detail:
+              "Rule-based normalization removes common line-number and prompt artifacts such as $, >>>, >>, PS>, and related clutter without relying on an external model.",
+            technique: "Rule-Based Processing",
+          },
+          {
+            name: "AI Extraction",
+            detail:
+              "Gemini 2.5 Flash is used when content requires semantic separation of executable code from prose, logs, or output.",
+            technique: "Gemini 2.5 Flash",
+          },
+          {
+            name: "Chrome APIs",
+            detail:
+              "Manifest V3 capabilities including Context Menus, Scripting, Clipboard, and Storage APIs connect the extraction workflow to the browser.",
+            technique: "Browser Integration",
+          },
+        ],
+      },
+      {
+        type: "text",
+        label: "DESIGN DECISIONS",
+        content:
+          "CodeDistill uses deterministic processing for predictable cleanup so common cases remain fast and independent of an API key. AI extraction is treated as a separate capability for mixed content where rule-based cleanup alone is not sufficient.",
+      },
+      {
+        type: "text",
+        label: "RESULT",
+        content:
+          "The extension provides a browser-native workflow for turning noisy copied material into executable code, with both a no-key deterministic path and an AI-assisted path for more complex content.",
+      },
+      {
+        type: "text",
+        label: "IMPLEMENTATION",
+        content:
+          "CodeDistill is implemented as a Chrome Extension Manifest V3 using JavaScript and Chrome Context Menus, Scripting, Clipboard, and Storage APIs. AI Copy Clean uses Gemini 2.5 Flash and requires internet access plus a valid locally stored Gemini API key.",
+      },
     ],
     url: "https://github.com/Vrinda0211/CodeDistill",
   },
@@ -419,10 +887,170 @@ const projects = {
     title: "Lightweight Container Runtime",
     description:
       "A minimal Linux container runtime focused on process lifecycle management and kernel-level resource monitoring.",
+    overview:
+      "This project implements a lightweight Linux container runtime centered on process lifecycle management, multi-container execution, logging, and kernel-level resource monitoring. A supervisor manages container processes and metadata, while a kernel module communicates through IOCTL and monitors RSS memory to support soft warnings and hard memory-limit enforcement.",
+    workflow: [
+      {
+        number: "01",
+        title: "Start the Container",
+        text:
+          "The runtime supervisor creates and manages container processes and maintains metadata so multiple running containers can be tracked through the engine interface.",
+      },
+      {
+        number: "02",
+        title: "Capture Container Logs",
+        text:
+          "Container output is handled through a bounded-buffer producer/consumer logging mechanism so process output can be collected without allowing the log buffer to grow without limit.",
+      },
+      {
+        number: "03",
+        title: "Monitor Resources",
+        text:
+          "A kernel module communicates with user space through an IOCTL interface and monitors resident set size (RSS) memory usage for the managed processes.",
+      },
+      {
+        number: "04",
+        title: "Enforce Limits",
+        text:
+          "The runtime can issue soft memory-limit warnings and enforce a hard memory limit by terminating a process that exceeds the configured resource boundary.",
+      },
+    ],
+    detection: [
+      "Container lifecycle management",
+      "Multi-container execution",
+      "Container metadata tracking",
+      "Bounded-buffer logging",
+      "Kernel-user IOCTL communication",
+      "RSS memory monitoring",
+      "Soft memory-limit warnings",
+      "Hard memory-limit enforcement",
+      "CPU, memory, and I/O workloads",
+    ],
+    attackPatterns: [
+      {
+        name: "Process Lifecycle",
+        detail:
+          "A supervisor manages container processes and their lifecycle, while engine ps exposes metadata for running containers.",
+        technique: "Process Management",
+      },
+      {
+        name: "IOCTL Communication",
+        detail:
+          "The user-space runtime communicates with the kernel module through an IOCTL interface to access kernel-level monitoring functionality.",
+        technique: "Kernel Interface",
+      },
+      {
+        name: "RSS Memory Enforcement",
+        detail:
+          "The kernel module monitors resident set size and supports soft warnings followed by hard enforcement through process termination when the configured limit is exceeded.",
+        technique: "Resource Control",
+      },
+    ],
+    feedback:
+      "The runtime focuses on demonstrating Linux process and resource-management mechanisms rather than attempting to reproduce the full isolation model of a production container platform.",
+    response:
+      "The implemented system provides container lifecycle management, multi-container tracking, bounded logging, kernel-assisted RSS monitoring, and memory-limit enforcement.",
+    observability:
+      "The project includes CPU, memory, and I/O workload programs for exercising the runtime and resource-monitoring behavior, along with process and container metadata exposed by the supervisor.",
     tags: [
       "C",
       "Linux Kernel Modules",
       "System Programming",
+    ],
+    sections: [
+      {
+        type: "text",
+        label: "OVERVIEW",
+        content:
+          "This project implements a lightweight Linux container runtime centered on process lifecycle management, multi-container execution, logging, and kernel-level resource monitoring. A supervisor manages container processes and metadata, while a kernel module communicates through IOCTL and monitors RSS memory to support soft warnings and hard memory-limit enforcement.",
+      },
+      {
+        type: "workflow",
+        label: "HOW IT WORKS",
+        items: [
+          {
+            number: "01",
+            title: "Start the Container",
+            text:
+              "The runtime supervisor creates and manages container processes and maintains metadata so multiple running containers can be tracked through the engine interface.",
+          },
+          {
+            number: "02",
+            title: "Capture Container Logs",
+            text:
+              "Container output is handled through a bounded-buffer producer/consumer logging mechanism so process output can be collected without allowing the log buffer to grow without limit.",
+          },
+          {
+            number: "03",
+            title: "Monitor Resources",
+            text:
+              "A kernel module communicates with user space through an IOCTL interface and monitors resident set size (RSS) memory usage for the managed processes.",
+          },
+          {
+            number: "04",
+            title: "Enforce Limits",
+            text:
+              "The runtime can issue soft memory-limit warnings and enforce a hard memory limit by terminating a process that exceeds the configured resource boundary.",
+          },
+        ],
+      },
+      {
+        type: "list",
+        label: "FEATURES",
+        items: [
+          "Container lifecycle management",
+          "Multi-container execution",
+          "Container metadata tracking",
+          "Bounded-buffer logging",
+          "Kernel-user IOCTL communication",
+          "RSS memory monitoring",
+          "Soft memory-limit warnings",
+          "Hard memory-limit enforcement",
+          "CPU, memory, and I/O workloads",
+        ],
+      },
+      {
+        type: "patterns",
+        label: "KEY TECHNICAL DETAILS",
+        items: [
+          {
+            name: "Process Lifecycle",
+            detail:
+              "A supervisor manages container processes and their lifecycle, while engine ps exposes metadata for running containers.",
+            technique: "Process Management",
+          },
+          {
+            name: "IOCTL Communication",
+            detail:
+              "The user-space runtime communicates with the kernel module through an IOCTL interface to access kernel-level monitoring functionality.",
+            technique: "Kernel Interface",
+          },
+          {
+            name: "RSS Memory Enforcement",
+            detail:
+              "The kernel module monitors resident set size and supports soft warnings followed by hard enforcement through process termination when the configured limit is exceeded.",
+            technique: "Resource Control",
+          },
+        ],
+      },
+      {
+        type: "text",
+        label: "DESIGN DECISIONS",
+        content:
+          "The runtime focuses on demonstrating Linux process and resource-management mechanisms rather than attempting to reproduce the full isolation model of a production container platform. Kernel-level monitoring is separated from the user-space supervisor through an explicit IOCTL interface.",
+      },
+      {
+        type: "text",
+        label: "RESULT",
+        content:
+          "The implemented system provides container lifecycle management, multi-container tracking, bounded logging, kernel-assisted RSS monitoring, and memory-limit enforcement.",
+      },
+      {
+        type: "text",
+        label: "IMPLEMENTATION",
+        content:
+          "The runtime is implemented in C with a user-space supervisor and a Linux kernel module connected through IOCTL. CPU, memory, and I/O workload programs are included to exercise the runtime and its resource-monitoring behavior.",
+      },
     ],
     url: "https://github.com/Vrinda0211/Container-Runtime",
   },
@@ -521,7 +1149,7 @@ function initNeuralVortex() {
   function compileShader(source, type) {
     const shader = gl.createShader(type);
 
-    if (!shader) return null;
+    if (!shader) return;
 
     gl.shaderSource(shader, source);
     gl.compileShader(shader);
@@ -1239,57 +1867,57 @@ function initProjectModal() {
     return element;
   }
 
-function renderSection(
-  section,
-  project
-) {
-  let element = null;
-
-  if (section.type === "image") {
-    element = renderImageSection(
-      section,
-      project
-    );
-  }
-
-  if (section.type === "workflow") {
-    element = renderWorkflowSection(
-      section
-    );
-  }
-
-  if (section.type === "list") {
-    element = renderListSection(
-      section
-    );
-  }
-
-  if (section.type === "patterns") {
-    element = renderPatternsSection(
-      section
-    );
-  }
-
-  if (section.type === "text") {
-    element = renderTextSection(
-      section
-    );
-  }
-
-  if (
-    element &&
-    [
-      "OVERVIEW",
-      "FEATURES",
-      "KEY TECHNICAL DETAILS",
-      "DESIGN DECISIONS",
-    ].includes(section.label)
+  function renderSection(
+    section,
+    project
   ) {
-    element.classList.add("modal-section-spaced");
-  }
+    let element = null;
 
-  return element;
-}
+    if (section.type === "image") {
+      element = renderImageSection(
+        section,
+        project
+      );
+    }
+
+    if (section.type === "workflow") {
+      element = renderWorkflowSection(
+        section
+      );
+    }
+
+    if (section.type === "list") {
+      element = renderListSection(
+        section
+      );
+    }
+
+    if (section.type === "patterns") {
+      element = renderPatternsSection(
+        section
+      );
+    }
+
+    if (section.type === "text") {
+      element = renderTextSection(
+        section
+      );
+    }
+
+    if (
+      element &&
+      [
+        "OVERVIEW",
+        "FEATURES",
+        "KEY TECHNICAL DETAILS",
+        "DESIGN DECISIONS",
+      ].includes(section.label)
+    ) {
+      element.classList.add("modal-section-spaced");
+    }
+
+    return element;
+  }
 
   function renderProjectSections(
     project
