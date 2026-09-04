@@ -1,25 +1,22 @@
 const canvas = document.getElementById("neuro");
+
 const pointer = {
   x: 0,
-  y: 0,
   targetX: window.innerWidth * 0.5,
+  y: 0,
   targetY: window.innerHeight * 0.5,
 };
+
 let animationFrame = null;
 
 const projects = {
   soc: {
     kicker: "Cyber security + agents",
     title: "Multi-Agent SOC Analyst Assistant",
-
     description:
       "An agentic Security Operations Center assistant that coordinates triage, investigation, and response through a stateful LangGraph workflow, combining security telemetry, historical behavior, MITRE ATT&CK mapping, and context-aware remediation.",
-
-    diagram: "assets/soc-architecture.png",
-
     overview:
       "The Multi-Agent SOC Analyst Assistant automates the analysis of incoming security events by passing them through specialized AI agents for triage, investigation, and response. Each stage enriches the incident with evidence from security logs, IP reputation, historical activity, geographic information, attack-pattern detection, and MITRE ATT&CK knowledge before producing a response recommendation.",
-
     workflow: [
       {
         number: "01",
@@ -40,7 +37,6 @@ const projects = {
           "Generates prioritized remediation actions using the investigation results and a structured remediation knowledge base. It also evaluates whether the incident should be escalated to a human analyst.",
       },
     ],
-
     detection: [
       "IP reputation analysis",
       "Incident history correlation",
@@ -51,7 +47,6 @@ const projects = {
       "MITRE ATT&CK mapping",
       "Context-aware escalation",
     ],
-
     attackPatterns: [
       {
         name: "Brute Force",
@@ -72,19 +67,14 @@ const projects = {
         technique: "T1078",
       },
     ],
-
     feedback:
       "Investigation confidence is evaluated before response. When confidence falls below 60, the workflow can return to triage for another assessment. The retriage loop is bounded to prevent repeated cycling.",
-
     response:
       "Remediation recommendations are generated from a structured knowledge base containing immediate actions, investigation steps, preventive measures, and escalation conditions. The escalation engine considers severity, investigation confidence, reputation score, administrative targeting, and successful authentication activity.",
-
     copilot:
       "The SOC Copilot provides analysts with a natural-language interface to incident data stored in SQLite. It can retrieve a specific incident or the broader incident history and use that context to answer analyst questions.",
-
     observability:
       "Processed incidents are persisted in SQLite, while Grafana dashboards provide visibility into incident activity, MITRE techniques, geographic activity, agent health, and processing performance.",
-
     tags: [
       "Python",
       "LangGraph",
@@ -94,7 +84,108 @@ const projects = {
       "Grafana",
       "MITRE ATT&CK",
     ],
-
+    sections: [
+      {
+        type: "image",
+        label: "ARCHITECTURE",
+        title: "Architecture Diagram",
+        description:
+          "The multi-agent workflow connects triage, investigation, response, enrichment, persistence, and observability.",
+        image: "assets/soc-architecture.png",
+      },
+      {
+        type: "text",
+        label: "OVERVIEW",
+        content:
+          "The Multi-Agent SOC Analyst Assistant automates the analysis of incoming security events by passing them through specialized AI agents for triage, investigation, and response. Each stage enriches the incident with evidence from security logs, IP reputation, historical activity, geographic information, attack-pattern detection, and MITRE ATT&CK knowledge before producing a response recommendation.",
+      },
+      {
+        type: "workflow",
+        label: "HOW IT WORKS",
+        items: [
+          {
+            number: "01",
+            title: "Triage Agent",
+            text:
+              "Evaluates incoming security events and determines whether they are suspicious enough to investigate. It uses IP reputation, incident history, and geographic information to identify signals such as repeated activity, suspicious countries, administrative targeting, and other risk indicators.",
+          },
+          {
+            number: "02",
+            title: "Investigation Agent",
+            text:
+              "Performs deeper analysis of suspicious incidents using historical authentication and port-scan activity. Detected patterns are mapped to MITRE ATT&CK techniques and the investigation produces an evidence-based attack classification and confidence score.",
+          },
+          {
+            number: "03",
+            title: "Response Agent",
+            text:
+              "Generates prioritized remediation actions using the investigation results and a structured remediation knowledge base. It also evaluates whether the incident should be escalated to a human analyst.",
+          },
+        ],
+      },
+      {
+        type: "list",
+        label: "FEATURES",
+        items: [
+          "IP reputation analysis",
+          "Incident history correlation",
+          "Geographic IP enrichment",
+          "Brute-force detection",
+          "Port-scan detection",
+          "Suspicious-login detection",
+          "MITRE ATT&CK mapping",
+          "Context-aware escalation",
+        ],
+      },
+      {
+        type: "patterns",
+        label: "KEY TECHNICAL DETAILS",
+        items: [
+          {
+            name: "Brute Force",
+            detail:
+              "Detected when an IP produces more than five failed authentication attempts.",
+            technique: "T1110",
+          },
+          {
+            name: "Port Scan",
+            detail:
+              "Detected when an IP scans more than ten unique destination ports.",
+            technique: "T1046",
+          },
+          {
+            name: "Suspicious Login",
+            detail:
+              "Detected when a successful login occurs after previous failed attempts.",
+            technique: "T1078",
+          },
+        ],
+      },
+      {
+        type: "text",
+        label: "DESIGN DECISIONS",
+        content:
+          "Investigation confidence is evaluated before response. When confidence falls below 60, the workflow can return to triage for another assessment. The retriage loop is bounded to prevent repeated cycling.",
+      },
+      {
+        type: "text",
+        label: "RESULT",
+        content:
+          "Remediation recommendations are generated from a structured knowledge base containing immediate actions, investigation steps, preventive measures, and escalation conditions. The escalation engine considers severity, investigation confidence, reputation score, administrative targeting, and successful authentication activity.",
+      },
+      {
+        type: "text",
+        label: "AI COPILOT",
+        content:
+          "The SOC Copilot provides analysts with a natural-language interface to incident data stored in SQLite. It can retrieve a specific incident or the broader incident history and use that context to answer analyst questions.",
+      },
+      {
+        type: "text",
+        label: "IMPLEMENTATION",
+        content:
+          "Processed incidents are persisted in SQLite, while Grafana dashboards provide visibility into incident activity, MITRE techniques, geographic activity, agent health, and processing performance.",
+      },
+    ],
     url: "https://github.com/Vrinda0211/AgenticAI-MultiAgent-SOC",
   },
 
@@ -102,14 +193,180 @@ const projects = {
     kicker: "Realtime collaboration",
     title: "Vertex",
     description:
-      "A collaborative code editor with concurrent state synchronization, operational transformation for conflicting edits, and a context-aware AI pair programmer.",
+      "A real-time collaborative code editor that allows multiple users to work on the same file simultaneously, with conflict resolution through Operational Transformation and an integrated Gemini-powered AI pair programmer.",
+    overview:
+      "Vertex is a collaborative browser-based code editor designed around real-time multi-user development. Users can create or join shared rooms, edit code concurrently, see other participants' changes and cursor positions, and work with an AI pair programmer directly inside the editor. The application combines a React and CodeMirror 6 frontend with a FastAPI backend, WebSockets for real-time communication, and Operational Transformation for resolving concurrent edits.",
+    workflow: [
+      {
+        number: "01",
+        title: "Create or Join a Room",
+        text:
+          "Users enter a room through a shared room identifier. The frontend establishes a WebSocket connection with the backend so participants in the same room can exchange editor updates in real time.",
+      },
+      {
+        number: "02",
+        title: "Collaborative Editing",
+        text:
+          "CodeMirror 6 provides the editing experience while local changes are converted into operations and transmitted through the WebSocket connection. Remote updates are applied to connected clients so everyone stays synchronized.",
+      },
+      {
+        number: "03",
+        title: "Conflict Resolution",
+        text:
+          "When multiple users make edits concurrently, Operational Transformation transforms incoming operations against local changes so conflicting edits can be reconciled while maintaining a consistent shared document state.",
+      },
+      {
+        number: "04",
+        title: "AI Pair Programmer",
+        text:
+          "The integrated Gemini-powered assistant allows users to interact with an AI coding partner from within the editor. It can provide coding assistance while the user continues working in the shared environment.",
+      },
+    ],
+    detection: [
+      "Real-time multi-user editing",
+      "WebSocket synchronization",
+      "Operational Transformation",
+      "Live cursor positions",
+      "Room-based collaboration",
+      "CodeMirror 6 editor",
+      "Gemini AI pair programmer",
+      "Local code saving",
+    ],
+    attackPatterns: [
+      {
+        name: "Operational Transformation",
+        detail:
+          "Concurrent editing operations are transformed against one another so multiple users can modify the same document without simply overwriting each other's changes.",
+        technique: "Conflict Resolution",
+      },
+      {
+        name: "WebSocket Synchronization",
+        detail:
+          "Persistent WebSocket connections allow editor operations, cursor updates, and collaboration events to be exchanged between the server and connected clients in real time.",
+        technique: "Realtime Communication",
+      },
+      {
+        name: "Room-Based Collaboration",
+        detail:
+          "Shared room identifiers allow multiple users to connect to the same collaborative editing session and receive updates belonging to that room.",
+        technique: "Session Management",
+      },
+    ],
+    feedback:
+      "The project separates local editor state from synchronized collaborative state. This allows local edits to be represented as operations and transformed when necessary before being incorporated into the shared document.",
+    response:
+      "The backend manages connected users and collaborative sessions while the frontend handles the editing interface, cursor state, and real-time updates. This separation keeps the editor responsive while allowing the server to coordinate shared document state.",
+    copilot:
+      "Vertex includes a Gemini-powered AI pair programmer directly within the collaborative editor, giving users access to AI-assisted coding without leaving the development environment.",
+    observability:
+      "The application is structured around a React frontend, CodeMirror 6 editor, FastAPI backend, WebSocket communication, and room-based collaboration. The project also supports saving code locally so work can be retained outside an active collaboration session.",
     tags: [
-      "Python",
+      "React",
       "FastAPI",
       "WebSockets",
       "Operational Transformation",
-      "CodeMirror",
+      "CodeMirror 6",
       "Gemini API",
+    ],
+    sections: [
+      {
+        type: "text",
+        label: "OVERVIEW",
+        content:
+          "Vertex is a collaborative browser-based code editor designed around real-time multi-user development. Users can create or join shared rooms, edit code concurrently, see other participants' changes and cursor positions, and work with an AI pair programmer directly inside the editor. The application combines a React and CodeMirror 6 frontend with a FastAPI backend, WebSockets for real-time communication, and Operational Transformation for resolving concurrent edits.",
+      },
+      {
+        type: "workflow",
+        label: "HOW IT WORKS",
+        items: [
+          {
+            number: "01",
+            title: "Create or Join a Room",
+            text:
+              "Users enter a room through a shared room identifier. The frontend establishes a WebSocket connection with the backend so participants in the same room can exchange editor updates in real time.",
+          },
+          {
+            number: "02",
+            title: "Collaborative Editing",
+            text:
+              "CodeMirror 6 provides the editing experience while local changes are converted into operations and transmitted through the WebSocket connection. Remote updates are applied to connected clients so everyone stays synchronized.",
+          },
+          {
+            number: "03",
+            title: "Conflict Resolution",
+            text:
+              "When multiple users make edits concurrently, Operational Transformation transforms incoming operations against local changes so conflicting edits can be reconciled while maintaining a consistent shared document state.",
+          },
+          {
+            number: "04",
+            title: "AI Pair Programmer",
+            text:
+              "The integrated Gemini-powered assistant allows users to interact with an AI coding partner from within the editor. It can provide coding assistance while the user continues working in the shared environment.",
+          },
+        ],
+      },
+      {
+        type: "list",
+        label: "FEATURES",
+        items: [
+          "Real-time multi-user editing",
+          "WebSocket synchronization",
+          "Operational Transformation",
+          "Live cursor positions",
+          "Room-based collaboration",
+          "CodeMirror 6 editor",
+          "Gemini AI pair programmer",
+          "Local code saving",
+        ],
+      },
+      {
+        type: "patterns",
+        label: "KEY TECHNICAL DETAILS",
+        items: [
+          {
+            name: "Operational Transformation",
+            detail:
+              "Concurrent editing operations are transformed against one another so multiple users can modify the same document without simply overwriting each other's changes.",
+            technique: "Conflict Resolution",
+          },
+          {
+            name: "WebSocket Synchronization",
+            detail:
+              "Persistent WebSocket connections allow editor operations, cursor updates, and collaboration events to be exchanged between the server and connected clients in real time.",
+            technique: "Realtime Communication",
+          },
+          {
+            name: "Room-Based Collaboration",
+            detail:
+              "Shared room identifiers allow multiple users to connect to the same collaborative editing session and receive updates belonging to that room.",
+            technique: "Session Management",
+          },
+        ],
+      },
+      {
+        type: "text",
+        label: "DESIGN DECISIONS",
+        content:
+          "The project separates local editor state from synchronized collaborative state. This allows local edits to be represented as operations and transformed when necessary before being incorporated into the shared document.",
+      },
+      {
+        type: "text",
+        label: "RESULT",
+        content:
+          "The backend manages connected users and collaborative sessions while the frontend handles the editing interface, cursor state, and real-time updates. This separation keeps the editor responsive while allowing the server to coordinate shared document state.",
+      },
+      {
+        type: "text",
+        label: "AI PAIR PROGRAMMER",
+        content:
+          "Vertex includes a Gemini-powered AI pair programmer directly within the collaborative editor, giving users access to AI-assisted coding without leaving the development environment.",
+      },
+      {
+        type: "text",
+        label: "IMPLEMENTATION",
+        content:
+          "The application is structured around a React frontend, CodeMirror 6 editor, FastAPI backend, WebSocket communication, and room-based collaboration. The project also supports saving code locally so work can be retained outside an active collaboration session.",
+      },
     ],
     url: "https://github.com/Vrinda0211/Vertex",
   },
@@ -119,7 +376,12 @@ const projects = {
     title: "CaskDB",
     description:
       "A persistent key-value storage engine built around write-ahead logging, crash recovery, sorted memtables, immutable SSTables, and multi-file compaction.",
-    tags: ["C++17", "Write-Ahead Logging", "SSTables", "File I/O"],
+    tags: [
+      "C++17",
+      "Write-Ahead Logging",
+      "SSTables",
+      "File I/O",
+    ],
     url: "https://github.com/Vrinda0211/CaskDB",
   },
 
@@ -128,7 +390,14 @@ const projects = {
     title: "SDN Link Failure Recovery",
     description:
       "A fault-tolerant SDN controller that detects link failures, recomputes shortest paths, invalidates stale flow rules, and reroutes traffic.",
-    tags: ["Python", "Ryu", "Mininet", "OpenFlow", "BFS", "SDN"],
+    tags: [
+      "Python",
+      "Ryu",
+      "Mininet",
+      "OpenFlow",
+      "BFS",
+      "SDN",
+    ],
     url: "https://github.com/Vrinda0211/SDN-Link-Failure-Recovery",
   },
 
@@ -137,7 +406,11 @@ const projects = {
     title: "CodeDistill",
     description:
       "A Chrome extension that extracts executable code from noisy web content using deterministic text normalization and AI-assisted extraction.",
-    tags: ["JavaScript", "Chrome Extension APIs", "Prompt Engineering"],
+    tags: [
+      "JavaScript",
+      "Chrome Extension APIs",
+      "Prompt Engineering",
+    ],
     url: "https://github.com/Vrinda0211/CodeDistill",
   },
 
@@ -146,7 +419,11 @@ const projects = {
     title: "Lightweight Container Runtime",
     description:
       "A minimal Linux container runtime focused on process lifecycle management and kernel-level resource monitoring.",
-    tags: ["C", "Linux Kernel Modules", "System Programming"],
+    tags: [
+      "C",
+      "Linux Kernel Modules",
+      "System Programming",
+    ],
     url: "https://github.com/Vrinda0211/Container-Runtime",
   },
 };
@@ -162,7 +439,6 @@ function initNeuralVortex() {
 
   const vertexSource = `
     precision mediump float;
-
     attribute vec2 a_position;
     varying vec2 vUv;
 
@@ -174,21 +450,14 @@ function initNeuralVortex() {
 
   const fragmentSource = `
     precision mediump float;
-
     varying vec2 vUv;
-
     uniform float u_time;
     uniform float u_ratio;
     uniform vec2 u_pointer_position;
     uniform float u_scroll_progress;
 
     vec2 rotate(vec2 uv, float th) {
-      return mat2(
-        cos(th),
-        sin(th),
-        -sin(th),
-        cos(th)
-      ) * uv;
+      return mat2(cos(th), sin(th), -sin(th), cos(th)) * uv;
     }
 
     float neuro_shape(vec2 uv, float t, float p) {
@@ -205,7 +474,7 @@ function initNeuralVortex() {
         sine_acc += sin(layer) + 2.4 * p;
         res += (.5 + .5 * cos(layer)) / scale;
 
-        scale *= 1.2;
+        scale *= (1.2);
       }
 
       return res.x + res.y;
@@ -222,13 +491,11 @@ function initNeuralVortex() {
       p = .5 * pow(1. - p, 2.);
 
       float t = .001 * u_time;
-
       float noise = neuro_shape(uv, t, p);
 
       noise = 1.2 * pow(noise, 3.);
       noise += pow(noise, 10.);
       noise = max(.0, noise - .5);
-
       noise *= (1. - length(vUv - .5));
 
       vec3 color = vec3(0.5, 0.15, 0.65);
@@ -239,12 +506,10 @@ function initNeuralVortex() {
         0.32 + 0.16 * sin(2.0 * u_scroll_progress + 1.2)
       );
 
-      color +=
-        vec3(0.15, 0.0, 0.6) *
+      color += vec3(0.15, 0.0, 0.6) *
         sin(2.0 * u_scroll_progress + 1.5);
 
-      color +=
-        vec3(0.12, 0.35, 0.18) *
+      color += vec3(0.12, 0.35, 0.18) *
         smoothstep(0.18, 0.82, vUv.x);
 
       color = color * noise;
@@ -307,6 +572,7 @@ function initNeuralVortex() {
   const vertexBuffer = gl.createBuffer();
 
   gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
+
   gl.bufferData(
     gl.ARRAY_BUFFER,
     vertices,
@@ -410,8 +676,7 @@ function initNeuralVortex() {
     );
 
     if (!reducedMotion) {
-      animationFrame =
-        requestAnimationFrame(render);
+      animationFrame = requestAnimationFrame(render);
     }
   }
 
@@ -443,15 +708,13 @@ function initThemeToggle() {
   const storedTheme =
     localStorage.getItem("portfolio-theme");
 
-  const prefersLight =
-    window.matchMedia(
-      "(prefers-color-scheme: light)"
-    ).matches;
+  const prefersLight = window
+    .matchMedia("(prefers-color-scheme: light)")
+    .matches;
 
-  const shouldUseLight =
-    storedTheme
-      ? storedTheme === "light"
-      : prefersLight;
+  const shouldUseLight = storedTheme
+    ? storedTheme === "light"
+    : prefersLight;
 
   function setTheme(theme) {
     const isLight = theme === "light";
@@ -480,9 +743,7 @@ function initThemeToggle() {
   }
 
   setTheme(
-    shouldUseLight
-      ? "light"
-      : "dark"
+    shouldUseLight ? "light" : "dark"
   );
 
   toggle.addEventListener(
@@ -501,7 +762,9 @@ function initThemeToggle() {
 
 function initScrollEffects() {
   const progress =
-    document.querySelector(".scroll-progress");
+    document.querySelector(
+      ".scroll-progress"
+    );
 
   const revealItems =
     document.querySelectorAll(".reveal");
@@ -518,7 +781,8 @@ function initScrollEffects() {
         ? (window.scrollY / maxScroll) * 100
         : 0;
 
-    progress.style.width = `${scrolled}%`;
+    progress.style.width =
+      `${scrolled}%`;
   }
 
   const observer =
@@ -579,12 +843,8 @@ function initTiltCards() {
             rect.height -
           0.5;
 
-        card.style.transform = `
-          perspective(900px)
-          rotateX(${y * -5}deg)
-          rotateY(${x * 7}deg)
-          translateY(-4px)
-        `;
+        card.style.transform =
+          `perspective(900px) rotateX(${y * -5}deg) rotateY(${x * 7}deg) translateY(-4px)`;
       }
     );
 
@@ -599,19 +859,29 @@ function initTiltCards() {
 
 function initProjectModal() {
   const modal =
-    document.querySelector(".project-modal");
+    document.querySelector(
+      ".project-modal"
+    );
 
   const backdrop =
-    document.querySelector(".modal-backdrop");
+    document.querySelector(
+      ".modal-backdrop"
+    );
 
   const closeButton =
-    document.querySelector(".modal-close");
+    document.querySelector(
+      ".modal-close"
+    );
 
   const title =
-    document.getElementById("modal-title");
+    document.getElementById(
+      "modal-title"
+    );
 
   const kicker =
-    document.getElementById("modal-kicker");
+    document.getElementById(
+      "modal-kicker"
+    );
 
   const description =
     document.getElementById(
@@ -619,54 +889,18 @@ function initProjectModal() {
     );
 
   const tags =
-    document.querySelector(".modal-tags");
+    document.querySelector(
+      ".modal-tags"
+    );
+
+  const sections =
+    document.getElementById(
+      "modal-project-sections"
+    );
 
   const link =
-    document.querySelector(".modal-link");
-
-  const overview =
-    document.getElementById(
-      "modal-overview"
-    );
-
-  const workflow =
-    document.getElementById(
-      "modal-workflow"
-    );
-
-  const detection =
-    document.getElementById(
-      "modal-detection"
-    );
-
-  const patterns =
-    document.getElementById(
-      "modal-patterns"
-    );
-
-  const feedback =
-    document.getElementById(
-      "modal-feedback"
-    );
-
-  const response =
-    document.getElementById(
-      "modal-response"
-    );
-
-  const copilot =
-    document.getElementById(
-      "modal-copilot"
-    );
-
-  const observability =
-    document.getElementById(
-      "modal-observability"
-    );
-
-  const diagram =
-    document.getElementById(
-      "modal-diagram"
+    document.querySelector(
+      ".modal-link"
     );
 
   const cards =
@@ -682,21 +916,409 @@ function initProjectModal() {
     !kicker ||
     !description ||
     !tags ||
+    !sections ||
     !link
   ) {
     return;
   }
 
-  function toggleSection(
-    id,
-    hasContent
+  function createElement(
+    tag,
+    className,
+    text
   ) {
-    const section =
-      document.getElementById(id);
+    const element =
+      document.createElement(tag);
 
-    if (section) {
-      section.hidden = !hasContent;
+    if (className) {
+      element.className =
+        className;
     }
+
+    if (text !== undefined) {
+      element.textContent = text;
+    }
+
+    return element;
+  }
+
+  function renderTextSection(section) {
+    const element =
+      createElement(
+        "section",
+        "modal-section modal-optional-section"
+      );
+
+    const label =
+      createElement(
+        "p",
+        "modal-section-label",
+        section.label
+      );
+
+    const content =
+      createElement(
+        "p",
+        "",
+        section.content
+      );
+
+    element.append(
+      label,
+      content
+    );
+
+    return element;
+  }
+
+  function renderImageSection(
+    section,
+    project
+  ) {
+    const element =
+      createElement(
+        "section",
+        "modal-section modal-diagram-section"
+      );
+
+    const label =
+      createElement(
+        "p",
+        "modal-section-label",
+        section.label
+      );
+
+    const heading =
+      createElement(
+        "div",
+        "architecture-heading"
+      );
+
+    const headingTitle =
+      createElement(
+        "h3",
+        "",
+        section.title ||
+          "Architecture Diagram"
+      );
+
+    const headingDescription =
+      createElement(
+        "p",
+        "",
+        section.description || ""
+      );
+
+    heading.append(
+      headingTitle,
+      headingDescription
+    );
+
+    const diagram =
+      createElement(
+        "div",
+        "architecture-diagram"
+      );
+
+    const image =
+      createElement(
+        "img",
+        "architecture-image"
+      );
+
+    image.src = section.image;
+
+    image.alt =
+      `${project.title} architecture diagram`;
+
+    image.loading = "eager";
+    image.decoding = "async";
+
+    diagram.appendChild(image);
+
+    element.append(
+      label,
+      heading,
+      diagram
+    );
+
+    return element;
+  }
+
+  function renderWorkflowSection(
+    section
+  ) {
+    const element =
+      createElement(
+        "section",
+        "modal-section modal-optional-section"
+      );
+
+    const label =
+      createElement(
+        "p",
+        "modal-section-label",
+        section.label
+      );
+
+    const workflow =
+      createElement(
+        "div",
+        "modal-workflow"
+      );
+
+    section.items.forEach(
+      (step) => {
+        const article =
+          createElement(
+            "article",
+            "workflow-card"
+          );
+
+        const number =
+          createElement(
+            "span",
+            "workflow-number",
+            step.number
+          );
+
+        const stepTitle =
+          createElement(
+            "h3",
+            "",
+            step.title
+          );
+
+        const text =
+          createElement(
+            "p",
+            "",
+            step.text
+          );
+
+        article.append(
+          number,
+          stepTitle,
+          text
+        );
+
+        workflow.appendChild(
+          article
+        );
+      }
+    );
+
+    element.append(
+      label,
+      workflow
+    );
+
+    return element;
+  }
+
+  function renderListSection(
+    section
+  ) {
+    const element =
+      createElement(
+        "section",
+        "modal-section modal-optional-section"
+      );
+
+    const label =
+      createElement(
+        "p",
+        "modal-section-label",
+        section.label
+      );
+
+    const grid =
+      createElement(
+        "div",
+        "modal-detection-grid"
+      );
+
+    section.items.forEach(
+      (item) => {
+        grid.appendChild(
+          createElement(
+            "span",
+            "detection-item",
+            item
+          )
+        );
+      }
+    );
+
+    element.append(
+      label,
+      grid
+    );
+
+    return element;
+  }
+
+  function renderPatternsSection(
+    section
+  ) {
+    const element =
+      createElement(
+        "section",
+        "modal-section modal-optional-section"
+      );
+
+    const label =
+      createElement(
+        "p",
+        "modal-section-label",
+        section.label
+      );
+
+    const grid =
+      createElement(
+        "div",
+        "modal-pattern-grid"
+      );
+
+    section.items.forEach(
+      (pattern) => {
+        const article =
+          createElement(
+            "article",
+            "pattern-card"
+          );
+
+        const heading =
+          createElement(
+            "div",
+            "pattern-heading"
+          );
+
+        const patternName =
+          createElement(
+            "h3",
+            "",
+            pattern.name
+          );
+
+        const technique =
+          createElement(
+            "span",
+            "",
+            pattern.technique
+          );
+
+        const detail =
+          createElement(
+            "p",
+            "",
+            pattern.detail
+          );
+
+        heading.append(
+          patternName,
+          technique
+        );
+
+        article.append(
+          heading,
+          detail
+        );
+
+        grid.appendChild(
+          article
+        );
+      }
+    );
+
+    element.append(
+      label,
+      grid
+    );
+
+    return element;
+  }
+
+function renderSection(
+  section,
+  project
+) {
+  let element = null;
+
+  if (section.type === "image") {
+    element = renderImageSection(
+      section,
+      project
+    );
+  }
+
+  if (section.type === "workflow") {
+    element = renderWorkflowSection(
+      section
+    );
+  }
+
+  if (section.type === "list") {
+    element = renderListSection(
+      section
+    );
+  }
+
+  if (section.type === "patterns") {
+    element = renderPatternsSection(
+      section
+    );
+  }
+
+  if (section.type === "text") {
+    element = renderTextSection(
+      section
+    );
+  }
+
+  if (
+    element &&
+    [
+      "OVERVIEW",
+      "FEATURES",
+      "KEY TECHNICAL DETAILS",
+      "DESIGN DECISIONS",
+    ].includes(section.label)
+  ) {
+    element.classList.add("modal-section-spaced");
+  }
+
+  return element;
+}
+
+  function renderProjectSections(
+    project
+  ) {
+    sections.replaceChildren();
+
+    if (
+      !Array.isArray(
+        project.sections
+      )
+    ) {
+      return;
+    }
+
+    project.sections.forEach(
+      (section) => {
+        const element =
+          renderSection(
+            section,
+            project
+          );
+
+        if (element) {
+          sections.appendChild(
+            element
+          );
+        }
+      }
+    );
   }
 
   function openProject(card) {
@@ -711,8 +1333,6 @@ function initProjectModal() {
     const rect =
       card.getBoundingClientRect();
 
-    /* Main project information */
-
     kicker.textContent =
       project.kicker;
 
@@ -722,297 +1342,23 @@ function initProjectModal() {
     description.textContent =
       project.description;
 
-    /* Technology tags */
-
     tags.replaceChildren(
       ...project.tags.map(
-        (tag) => {
-          const item =
-            document.createElement(
-              "span"
-            );
-
-          item.textContent =
-            tag;
-
-          return item;
-        }
+        (tag) =>
+          createElement(
+            "span",
+            "",
+            tag
+          )
       )
     );
-
-    /* GitHub link */
 
     link.href =
       project.url;
 
-    /* Architecture diagram */
-
-    if (
-      diagram &&
-      project.diagram
-    ) {
-      diagram.src =
-        project.diagram;
-
-      diagram.alt =
-        `${project.title} architecture diagram`;
-
-      diagram.hidden = false;
-
-      toggleSection(
-        "modal-diagram-section",
-        true
-      );
-    } else {
-      if (diagram) {
-        diagram.removeAttribute(
-          "src"
-        );
-
-        diagram.hidden = true;
-      }
-
-      toggleSection(
-        "modal-diagram-section",
-        false
-      );
-    }
-
-    /* Overview */
-
-    if (overview) {
-      overview.textContent =
-        project.overview || "";
-
-      toggleSection(
-        "modal-overview-section",
-        Boolean(project.overview)
-      );
-    }
-
-    /* Agent workflow */
-
-    if (workflow) {
-      workflow.replaceChildren();
-
-      if (project.workflow?.length) {
-        project.workflow.forEach(
-          (step) => {
-            const article =
-              document.createElement(
-                "article"
-              );
-
-            article.className =
-              "workflow-card";
-
-            const number =
-              document.createElement(
-                "span"
-              );
-
-            number.className =
-              "workflow-number";
-
-            number.textContent =
-              step.number;
-
-            const heading =
-              document.createElement(
-                "h3"
-              );
-
-            heading.textContent =
-              step.title;
-
-            const text =
-              document.createElement(
-                "p"
-              );
-
-            text.textContent =
-              step.text;
-
-            article.append(
-              number,
-              heading,
-              text
-            );
-
-            workflow.appendChild(
-              article
-            );
-          }
-        );
-      }
-
-      toggleSection(
-        "modal-workflow-section",
-        Boolean(
-          project.workflow?.length
-        )
-      );
-    }
-
-    /* Detection capabilities */
-
-    if (detection) {
-      detection.replaceChildren();
-
-      if (project.detection?.length) {
-        project.detection.forEach(
-          (item) => {
-            const element =
-              document.createElement(
-                "span"
-              );
-
-            element.className =
-              "detection-item";
-
-            element.textContent =
-              item;
-
-            detection.appendChild(
-              element
-            );
-          }
-        );
-      }
-
-      toggleSection(
-        "modal-detection-section",
-        Boolean(
-          project.detection?.length
-        )
-      );
-    }
-
-    /* Attack patterns */
-
-    if (patterns) {
-      patterns.replaceChildren();
-
-      if (
-        project.attackPatterns?.length
-      ) {
-        project.attackPatterns.forEach(
-          (pattern) => {
-            const article =
-              document.createElement(
-                "article"
-              );
-
-            article.className =
-              "pattern-card";
-
-            const heading =
-              document.createElement(
-                "div"
-              );
-
-            heading.className =
-              "pattern-heading";
-
-            const name =
-              document.createElement(
-                "h3"
-              );
-
-            name.textContent =
-              pattern.name;
-
-            const technique =
-              document.createElement(
-                "span"
-              );
-
-            technique.textContent =
-              pattern.technique;
-
-            const detail =
-              document.createElement(
-                "p"
-              );
-
-            detail.textContent =
-              pattern.detail;
-
-            heading.append(
-              name,
-              technique
-            );
-
-            article.append(
-              heading,
-              detail
-            );
-
-            patterns.appendChild(
-              article
-            );
-          }
-        );
-      }
-
-      toggleSection(
-        "modal-patterns-section",
-        Boolean(
-          project.attackPatterns?.length
-        )
-      );
-    }
-
-    /* Remaining sections */
-
-    if (feedback) {
-      feedback.textContent =
-        project.feedback || "";
-
-      toggleSection(
-        "modal-feedback-section",
-        Boolean(project.feedback)
-      );
-    }
-
-    if (response) {
-      response.textContent =
-        project.response || "";
-
-      toggleSection(
-        "modal-response-section",
-        Boolean(project.response)
-      );
-    }
-
-    if (copilot) {
-      copilot.textContent =
-        project.copilot || "";
-
-      toggleSection(
-        "modal-copilot-section",
-        Boolean(project.copilot)
-      );
-    }
-
-    if (observability) {
-      observability.textContent =
-        project.observability || "";
-
-      toggleSection(
-        "modal-observability-section",
-        Boolean(
-          project.observability
-        )
-      );
-    }
-
-    /*
-     * Preserve the card-to-modal
-     * expansion animation.
-     * Final modal dimensions
-     * are handled by CSS.
-     */
+    renderProjectSections(
+      project
+    );
 
     modal.style.setProperty(
       "--card-left",

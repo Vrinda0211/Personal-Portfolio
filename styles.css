@@ -836,87 +836,118 @@ body.light-theme .modal-backdrop {
   transform: translate(-50%, -50%) rotate(-90deg);
 }
 
-#modal-overview-section,
-#modal-workflow-section,
-#modal-detection-section,
-#modal-patterns-section,
-#modal-feedback-section,
-#modal-response-section,
-#modal-copilot-section,
-#modal-observability-section {
-  margin-top: 44px;
+.project-modal-sections {
+  display: grid;
+  gap: 52px;
 }
 
-#modal-overview-section > h3,
-#modal-workflow-section > h3,
-#modal-detection-section > h3,
-#modal-patterns-section > h3,
-#modal-feedback-section > h3,
-#modal-response-section > h3,
-#modal-copilot-section > h3,
-#modal-observability-section > h3 {
-  margin-bottom: 18px;
+.modal-section-spaced {
+  padding-top: 24px;
+}
+
+.project-modal-sections > section,
+.project-modal-sections > div {
+  margin: 0;
+}
+
+.project-modal-sections > * + * {
+  margin-top: 0;
+}
+
+.project-modal-sections .modal-section-label,
+.project-section-label {
+  margin-bottom: 14px;
   color: var(--text);
   font-family: "Space Grotesk", Geist, sans-serif;
-  font-size: 0.82rem;
-  font-weight: 800;
-  letter-spacing: 0.14em;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0;
   line-height: 1.2;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
-#modal-overview,
-#modal-feedback,
-#modal-response,
-#modal-copilot,
-#modal-observability {
-  max-width: 920px;
-  margin-bottom: 0;
-  color: var(--muted);
-  font-family: Geist, Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 1rem;
-  line-height: 1.78;
+.project-modal-sections > .modal-section-spaced {
+  padding-top: 24px;
 }
 
-.modal-diagram-section {
-  margin-top: 42px;
-}
-
-.modal-diagram-section .modal-section-label {
-  margin-bottom: 10px;
-  color: var(--lime);
-  font-size: 0.76rem;
-  font-weight: 800;
-  letter-spacing: 0.14em;
-  line-height: 1.2;
-  text-transform: uppercase;
-}
-
-.architecture-heading {
-  margin-bottom: 18px;
-}
-
-.architecture-heading h3 {
-  margin-bottom: 7px;
+.project-section-title {
+  margin-bottom: 22px;
   color: var(--text);
   font-family: "Space Grotesk", Geist, sans-serif;
   font-size: 1.25rem;
   line-height: 1.2;
 }
 
-.architecture-heading p {
-  max-width: 760px;
+.project-section-text {
+  max-width: 920px;
   margin: 0;
   color: var(--muted);
   font-family: Geist, Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  font-size: 0.92rem;
-  line-height: 1.6;
+  font-size: 1rem;
+  line-height: 1.78;
 }
 
-.architecture-diagram {
+.project-section-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.project-section-card {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  position: relative;
+  flex-direction: column;
+  min-height: 210px;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.025)),
+    rgba(5, 8, 20, 0.28);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  transition: transform 220ms ease, border-color 220ms ease, background 220ms ease, box-shadow 220ms ease;
+}
+
+.project-section-card::before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 42%;
+  height: 1px;
+  content: "";
+  background: linear-gradient(90deg, var(--cyan), transparent);
+  opacity: 0.8;
+}
+
+.project-section-card:hover {
+  border-color: var(--line-strong);
+  background:
+    linear-gradient(145deg, rgba(159, 180, 255, 0.11), rgba(216, 167, 196, 0.065)),
+    rgba(9, 13, 31, 0.48);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    0 18px 45px rgba(0, 0, 0, 0.2),
+    0 0 28px rgba(159, 180, 255, 0.07);
+  transform: translateY(-3px);
+}
+
+.project-section-card h3 {
+  margin: 0 0 12px;
+  color: var(--text);
+  font-family: "Space Grotesk", Geist, sans-serif;
+  font-size: 1.2rem;
+  line-height: 1.2;
+}
+
+.project-section-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.94rem;
+  line-height: 1.68;
+}
+
+.project-section-image {
   width: min(100%, 900px);
   margin: 0;
   padding: 14px;
@@ -925,31 +956,36 @@ body.light-theme .modal-backdrop {
   background:
     linear-gradient(145deg, rgba(159, 180, 255, 0.07), rgba(216, 167, 196, 0.045)),
     rgba(255, 255, 255, 0.025);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
   overflow: hidden;
 }
 
-.architecture-diagram img {
+.project-section-image img {
   display: block;
-  width: auto;
-  max-width: 100%;
+  width: 100%;
   height: auto;
-  max-height: 430px;
+  max-height: 520px;
   object-fit: contain;
   border-radius: 4px;
 }
 
-body.light-theme .architecture-diagram {
+body.light-theme .project-section-card {
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.68), rgba(255, 255, 255, 0.28)),
+    rgba(255, 255, 255, 0.32);
+}
+
+body.light-theme .project-section-card:hover {
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.82), rgba(159, 180, 255, 0.12)),
+    rgba(255, 255, 255, 0.42);
+}
+
+body.light-theme .project-section-image {
   background:
     linear-gradient(145deg, rgba(159, 180, 255, 0.1), rgba(216, 167, 196, 0.06)),
     rgba(255, 255, 255, 0.42);
 }
-
-#modal-workflow {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
-}
-
 .workflow-card {
   display: flex;
   position: relative;
@@ -961,6 +997,8 @@ body.light-theme .architecture-diagram {
   background:
     linear-gradient(145deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.025)),
     rgba(5, 8, 20, 0.28);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: transform 220ms ease, border-color 220ms ease, background 220ms ease, box-shadow 220ms ease;
 }
 
 body.light-theme .workflow-card {
@@ -994,10 +1032,23 @@ body.light-theme .workflow-card {
   line-height: 1.68;
 }
 
-#modal-detection {
+.workflow-card:hover,
+.pattern-card:hover {
+  border-color: var(--line-strong);
+  background:
+    linear-gradient(145deg, rgba(159, 180, 255, 0.1), rgba(216, 167, 196, 0.055)),
+    rgba(9, 13, 31, 0.44);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 16px 40px rgba(0, 0, 0, 0.18),
+    0 0 26px rgba(159, 180, 255, 0.06);
+  transform: translateY(-3px);
+}
+
+.modal-detection-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 16px;
 }
 
 .detection-item {
@@ -1026,12 +1077,21 @@ body.light-theme .workflow-card {
   background:
     linear-gradient(145deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.025)),
     rgba(5, 8, 20, 0.28);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: transform 220ms ease, border-color 220ms ease, background 220ms ease, box-shadow 220ms ease;
 }
 
 body.light-theme .pattern-card {
   background:
     linear-gradient(145deg, rgba(255, 255, 255, 0.68), rgba(255, 255, 255, 0.28)),
     rgba(255, 255, 255, 0.32);
+}
+
+body.light-theme .workflow-card:hover,
+body.light-theme .pattern-card:hover {
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.82), rgba(159, 180, 255, 0.1)),
+    rgba(255, 255, 255, 0.42);
 }
 
 .pattern-heading {
@@ -1183,7 +1243,8 @@ body.light-theme .pattern-card {
   }
 
   #modal-workflow,
-  #modal-patterns {
+  #modal-patterns,
+  .project-section-grid {
     grid-template-columns: 1fr;
   }
 
@@ -1288,21 +1349,36 @@ body.light-theme .pattern-card {
     margin: 22px 0 34px;
   }
 
-  #modal-overview-section,
-  #modal-workflow-section,
-  #modal-detection-section,
-  #modal-patterns-section,
-  #modal-feedback-section,
-  #modal-response-section,
-  #modal-copilot-section,
-  #modal-observability-section,
-  .modal-diagram-section {
-    margin-top: 36px;
+  .project-modal-sections > * {
+    margin: 0;
   }
 
   #modal-workflow,
-  #modal-patterns {
+  #modal-patterns,
+  .project-section-grid {
     grid-template-columns: 1fr;
+  }
+
+  .project-modal-sections {
+  gap: 36px;
+}
+
+.project-modal-sections > section,
+.project-modal-sections > div {
+  margin: 0;
+}
+
+  .project-section-card {
+    min-height: auto;
+    padding: 20px;
+  }
+
+  .project-section-image {
+    padding: 8px;
+  }
+
+  .project-section-image img {
+    max-height: 320px;
   }
 
   .workflow-card {
