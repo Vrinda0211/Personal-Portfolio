@@ -951,7 +951,7 @@ function initProjectModal() {
 
     const label =
       createElement(
-        "p",
+        "h3",
         "modal-section-label",
         section.label
       );
@@ -983,7 +983,7 @@ function initProjectModal() {
 
     const label =
       createElement(
-        "p",
+        "h3",
         "modal-section-label",
         section.label
       );
@@ -1056,7 +1056,7 @@ function initProjectModal() {
 
     const label =
       createElement(
-        "p",
+        "h3",
         "modal-section-label",
         section.label
       );
@@ -1127,7 +1127,7 @@ function initProjectModal() {
 
     const label =
       createElement(
-        "p",
+        "h3",
         "modal-section-label",
         section.label
       );
@@ -1169,7 +1169,7 @@ function initProjectModal() {
 
     const label =
       createElement(
-        "p",
+        "h3",
         "modal-section-label",
         section.label
       );
