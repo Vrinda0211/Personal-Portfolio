@@ -966,9 +966,11 @@ body.light-theme .modal-backdrop {
 
 .project-section-image img {
   display: block;
-  width: 100%;
+  width: 350px;
+  max-width: 100%;
   height: auto;
-  max-height: 520px;
+  max-height: 300px;
+  margin: 0 auto;
   object-fit: contain;
   border-radius: 4px;
 }
@@ -1445,4 +1447,13 @@ body.light-theme .pattern-card:hover {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
+}
+
+.architecture-image {
+  width: 90% !important;
+  height: auto;
+  max-height: 450px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
 }
